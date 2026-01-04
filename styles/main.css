@@ -523,6 +523,26 @@ body {
     color: var(--accent-color);
 }
 
+/* Selected Tool Cards in Lesson Challenge */
+.selected-tool-card {
+    background: white;
+    padding: 15px;
+    border-radius: 10px;
+    border: 2px solid var(--primary-color);
+    text-align: center;
+    min-width: 120px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+
+/* Challenge Messages */
+.challenge-message {
+    padding: 8px;
+    margin-bottom: 8px;
+    background: rgba(255,255,255,0.1);
+    border-radius: 5px;
+    animation: slideIn 0.3s ease;
+}
+
 /* Responsive Design */
 @media (max-width: 768px) {
     .main-header h1 {

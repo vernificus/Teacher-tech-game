@@ -151,7 +151,7 @@ function renderOpponentList() {
     const opponents = teachers.filter(t => t.id !== currentUser.id);
 
     if (opponents.length === 0) {
-        opponentList.innerHTML = '<p style="text-align: center; color: #555;">No other teachers available. Add more teachers to battle!</p>';
+        opponentList.innerHTML = '<p style="text-align: center; color: #555;">No other teachers available. Create a lesson challenge!</p>';
         return;
     }
 
@@ -160,17 +160,17 @@ function renderOpponentList() {
         opponentCard.className = 'opponent-card';
         opponentCard.innerHTML = `
             <h3>${opponent.name}</h3>
-            <p>${opponent.ownedCards.length} cards</p>
+            <p>${opponent.ownedCards.length} tools</p>
             <p style="font-size: 0.9em; margin-top: 10px;">
                 Record: ${opponent.wins}W - ${opponent.losses}L
             </p>
             <button class="btn btn-primary" style="margin-top: 15px; padding: 8px 16px; font-size: 0.9em;">
-                Challenge!
+                Create Challenge!
             </button>
         `;
 
         opponentCard.addEventListener('click', () => {
-            initiateBattle(opponent);
+            initiateChallenge(opponent);
         });
 
         opponentList.appendChild(opponentCard);

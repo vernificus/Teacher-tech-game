@@ -32,7 +32,7 @@
             <div id="dashboard-screen" class="screen">
                 <div class="dashboard-nav">
                     <button class="nav-btn active" data-view="collection">My Collection</button>
-                    <button class="nav-btn" data-view="battle">Battle</button>
+                    <button class="nav-btn" data-view="battle">Lesson Challenge</button>
                     <button class="nav-btn" data-view="earn-cards">Earn Cards</button>
                 </div>
 
@@ -47,37 +47,43 @@
                     <div id="card-grid" class="card-grid"></div>
                 </div>
 
-                <!-- Battle View -->
+                <!-- Lesson Challenge View -->
                 <div id="battle-view" class="view">
                     <div class="battle-container">
-                        <h2>Choose Your Opponent</h2>
+                        <h2>🎓 Lesson Planning Challenge</h2>
+                        <p style="margin-bottom: 20px; color: #666;">Create the best lesson plan using your edtech tools!</p>
                         <div id="opponent-list" class="opponent-list"></div>
 
-                        <div id="battle-arena" class="battle-arena" style="display: none;">
+                        <div id="challenge-arena" class="battle-arena" style="display: none;">
                             <div class="battle-header">
                                 <h3><span id="player1-name"></span> vs <span id="player2-name"></span></h3>
                             </div>
 
-                            <div class="battle-field">
-                                <div class="player-side">
-                                    <h4>Your Card</h4>
-                                    <div id="player-card" class="battle-card-slot"></div>
-                                    <div class="card-selector" id="player-deck"></div>
-                                </div>
+                            <!-- Scenario Display -->
+                            <div id="scenario-display" style="margin-bottom: 30px;"></div>
 
-                                <div class="battle-log">
-                                    <h4>Battle Log</h4>
-                                    <div id="battle-messages"></div>
-                                </div>
-
-                                <div class="opponent-side">
-                                    <h4>Opponent Card</h4>
-                                    <div id="opponent-card" class="battle-card-slot"></div>
+                            <!-- Selected Cards Display -->
+                            <div style="margin-bottom: 20px;">
+                                <h4 style="margin-bottom: 15px;">Your Selected Tools:</h4>
+                                <div id="selected-cards-display" style="display: flex; gap: 15px; flex-wrap: wrap; min-height: 80px; padding: 15px; background: var(--light-bg); border-radius: 10px;">
+                                    <p style="color: #999;">Select tools from your deck below...</p>
                                 </div>
                             </div>
 
+                            <!-- Teacher's Deck -->
+                            <div style="margin-bottom: 20px;">
+                                <h4 style="margin-bottom: 15px;">Your Available Tools:</h4>
+                                <div id="teacher-deck" class="card-selector" style="min-height: 100px;"></div>
+                            </div>
+
+                            <!-- Challenge Log -->
+                            <div class="battle-log" style="margin-bottom: 20px;">
+                                <h4>Evaluation Results</h4>
+                                <div id="challenge-messages"></div>
+                            </div>
+
                             <div class="battle-controls">
-                                <button id="start-battle-btn" class="btn btn-primary">Start Battle</button>
+                                <button id="evaluate-lesson-btn" class="btn btn-primary">Evaluate Lesson Plans</button>
                                 <button id="back-to-selection-btn" class="btn btn-secondary">Back</button>
                             </div>
                         </div>
@@ -122,7 +128,7 @@
     <script src="js/data.js"></script>
     <script src="js/sheets.js"></script>
     <script src="js/cards.js"></script>
-    <script src="js/battle.js"></script>
+    <script src="js/lesson-challenge.js"></script>
     <script src="js/app.js"></script>
 </body>
 </html>

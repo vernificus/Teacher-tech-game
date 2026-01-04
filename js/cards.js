@@ -21,16 +21,24 @@ function createCardElement(card, isOwned = true, size = 'normal') {
             </div>
             <div class="card-stats">
                 <div class="stat-row">
-                    <span class="stat-label">⚡ Power:</span>
-                    <span class="stat-value">${card.power}</span>
+                    <span class="stat-label">👥 Student Centered:</span>
+                    <span class="stat-value">${card.studentCentered}</span>
                 </div>
                 <div class="stat-row">
-                    <span class="stat-label">🛡️ Defense:</span>
-                    <span class="stat-value">${card.defense}</span>
+                    <span class="stat-label">📐 Design:</span>
+                    <span class="stat-value">${card.design}</span>
                 </div>
                 <div class="stat-row">
-                    <span class="stat-label">⚡ Speed:</span>
-                    <span class="stat-value">${card.speed}</span>
+                    <span class="stat-label">🎯 Engage:</span>
+                    <span class="stat-value">${card.engage}</span>
+                </div>
+                <div class="stat-row">
+                    <span class="stat-label">📊 Assess:</span>
+                    <span class="stat-value">${card.assess}</span>
+                </div>
+                <div class="stat-row">
+                    <span class="stat-label">🔄 Reflect & Respond:</span>
+                    <span class="stat-value">${card.reflectRespond}</span>
                 </div>
             </div>
             <div class="card-description">
@@ -58,20 +66,28 @@ function showCardModal(card) {
                 <span class="stat-value">${card.type}</span>
             </div>
             <div class="stat-row">
-                <span class="stat-label">⚡ Power:</span>
-                <span class="stat-value">${card.power}</span>
+                <span class="stat-label">👥 Student Centered:</span>
+                <span class="stat-value">${card.studentCentered}</span>
             </div>
             <div class="stat-row">
-                <span class="stat-label">🛡️ Defense:</span>
-                <span class="stat-value">${card.defense}</span>
+                <span class="stat-label">📐 Design:</span>
+                <span class="stat-value">${card.design}</span>
             </div>
             <div class="stat-row">
-                <span class="stat-label">⚡ Speed:</span>
-                <span class="stat-value">${card.speed}</span>
+                <span class="stat-label">🎯 Engage:</span>
+                <span class="stat-value">${card.engage}</span>
             </div>
             <div class="stat-row">
-                <span class="stat-label">📊 Total Stats:</span>
-                <span class="stat-value">${card.power + card.defense + card.speed}</span>
+                <span class="stat-label">📊 Assess:</span>
+                <span class="stat-value">${card.assess}</span>
+            </div>
+            <div class="stat-row">
+                <span class="stat-label">🔄 Reflect & Respond:</span>
+                <span class="stat-value">${card.reflectRespond}</span>
+            </div>
+            <div class="stat-row">
+                <span class="stat-label">📊 Framework Total:</span>
+                <span class="stat-value">${card.studentCentered + card.design + card.engage + card.assess + card.reflectRespond}</span>
             </div>
         </div>
         <div style="margin-bottom: 15px;">
@@ -146,16 +162,24 @@ function createBattleCardDisplay(card) {
             </div>
             <div class="card-stats">
                 <div class="stat-row">
-                    <span class="stat-label">⚡ Power:</span>
-                    <span class="stat-value">${card.power}</span>
+                    <span class="stat-label">👥 Student Centered:</span>
+                    <span class="stat-value">${card.studentCentered}</span>
                 </div>
                 <div class="stat-row">
-                    <span class="stat-label">🛡️ Defense:</span>
-                    <span class="stat-value">${card.defense}</span>
+                    <span class="stat-label">📐 Design:</span>
+                    <span class="stat-value">${card.design}</span>
                 </div>
                 <div class="stat-row">
-                    <span class="stat-label">⚡ Speed:</span>
-                    <span class="stat-value">${card.speed}</span>
+                    <span class="stat-label">🎯 Engage:</span>
+                    <span class="stat-value">${card.engage}</span>
+                </div>
+                <div class="stat-row">
+                    <span class="stat-label">📊 Assess:</span>
+                    <span class="stat-value">${card.assess}</span>
+                </div>
+                <div class="stat-row">
+                    <span class="stat-label">🔄 Reflect & Respond:</span>
+                    <span class="stat-value">${card.reflectRespond}</span>
                 </div>
             </div>
         </div>
