@@ -4,7 +4,16 @@ document.addEventListener('DOMContentLoaded', () => {
     initializeApp();
 });
 
-function initializeApp() {
+async function initializeApp() {
+    // Load data from Google Sheets
+    const sheetsLoaded = await initializeFromSheets();
+
+    if (sheetsLoaded) {
+        console.log('✅ Google Sheets data loaded successfully!');
+    } else {
+        console.log('⚠️ Using fallback data (Google Sheets unavailable)');
+    }
+
     // Check if user is logged in
     const currentUser = getCurrentTeacher();
 
@@ -15,6 +24,7 @@ function initializeApp() {
     }
 
     setupEventListeners();
+    addRefreshButton();
 }
 
 function setupEventListeners() {
@@ -243,6 +253,47 @@ function handleSubmitUsage() {
     } else {
         alert('You already have this card!');
     }
+}
+
+// Add refresh button to sync with Google Sheets
+function addRefreshButton() {
+    const header = document.querySelector('.main-header .user-info');
+
+    const refreshBtn = document.createElement('button');
+    refreshBtn.id = 'refresh-sheets-btn';
+    refreshBtn.className = 'btn btn-secondary';
+    refreshBtn.innerHTML = '🔄 Sync';
+    refreshBtn.title = 'Refresh data from Google Sheets';
+    refreshBtn.style.cssText = 'padding: 8px 16px; font-size: 0.9em;';
+
+    refreshBtn.addEventListener('click', async () => {
+        refreshBtn.disabled = true;
+        refreshBtn.innerHTML = '⏳ Syncing...';
+
+        const success = await refreshFromSheets();
+
+        if (success) {
+            alert('✅ Data synced from Google Sheets!');
+            // Refresh current view
+            const currentUser = getCurrentTeacher();
+            if (currentUser) {
+                // Update current teacher reference
+                setCurrentTeacher(getTeacher(currentUser.id));
+                showDashboard();
+            } else {
+                showLogin();
+            }
+        } else {
+            alert('❌ Failed to sync. Using cached data.');
+        }
+
+        refreshBtn.disabled = false;
+        refreshBtn.innerHTML = '🔄 Sync';
+    });
+
+    // Insert before logout button
+    const logoutBtn = document.getElementById('logout-btn');
+    header.insertBefore(refreshBtn, logoutBtn);
 }
 
 // Keyboard shortcuts
