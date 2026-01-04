@@ -121,8 +121,8 @@ async function loadDataFromSheets() {
         const sheetData = await fetchSheetData();
         const { headers, data } = sheetData;
 
-        // Extract tool names (skip first 2 columns: Last Name, First Name)
-        const toolHeaders = headers.slice(2);
+        // Extract tool names (skip first 3 columns: Staff Name, Title, Grade Level/Specialty)
+        const toolHeaders = headers.slice(3);
 
         // Create cards from tools
         const cards = [];
@@ -152,13 +152,13 @@ async function loadDataFromSheets() {
         // Create teachers from staff data
         const teachers = [];
         data.forEach((row, index) => {
-            const lastName = row[headers[0]] || '';
-            const firstName = row[headers[1]] || '';
+            const staffName = row[headers[0]] || '';
+            const title = row[headers[1]] || '';
 
             // Skip empty rows
-            if (!lastName && !firstName) return;
+            if (!staffName) return;
 
-            const fullName = `${firstName} ${lastName}`.trim();
+            const fullName = staffName.trim();
 
             // Find which cards (tools) this teacher has access to
             const ownedCards = [];

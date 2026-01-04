@@ -6,7 +6,7 @@ A web app for teachers to "battle" each other in a Pokemon-style card game where
 
 - **📊 Google Sheets Integration**: Automatically syncs cards and teachers from your Google Sheet!
 - **⚔️ Battle System**: Pokemon-style turn-based battles between teachers
-- **🎴 Card Collection**: 21 instructional technology tools as collectible cards
+- **🎴 Card Collection**: 19 instructional technology tools as collectible cards
 - **👥 Staff Tracking**: 155+ staff members with tool access synced from your sheet
 - **🔄 Real-time Sync**: Click the sync button to refresh from your Google Sheet
 - **💾 Smart Caching**: Battle wins/losses preserved while card ownership updates
@@ -25,7 +25,7 @@ A web app for teachers to "battle" each other in a Pokemon-style card game where
 **Your connected sheet:** EDTeck Deck Tracking
 
 The app automatically:
-- Loads 21 technology tool cards
+- Loads 19 technology tool cards
 - Syncs 155+ staff members
 - Updates card ownership based on TRUE/FALSE values in your sheet
 - Caches data for fast performance
@@ -49,11 +49,11 @@ See [GOOGLE-SHEETS-INTEGRATION.md](GOOGLE-SHEETS-INTEGRATION.md) for full detail
 
 ## ✨ Current Technology Cards
 
-Your 21 tools from the Google Sheet:
+Your 19 tools from the Google Sheet:
 - Schoology, Magma Math, Kiddom Math, DiscoveryED, Lexia
 - Adobe Express, Canva, Performance Matters, Phoenix Gradebook
 - Nearpod, Brainpop, Wixie, Blooket, Newsela, WeVideo
-- Ozobot, Gemini, Copilot, Student Choice, and more!
+- Ozobot, Gemini, Copilot, Student Choice
 
 ## 🎮 Future Enhancements
 
