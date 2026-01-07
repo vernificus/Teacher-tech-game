@@ -203,14 +203,18 @@ class LessonPlanningChallenge {
         await this.delay(1000);
 
         // Determine winner
-        let winner, loser;
+        let winner, loser, winnerFit, loserFit;
         if (teacher1Fit > teacher2Fit) {
             winner = this.teacher1;
             loser = this.teacher2;
+            winnerFit = teacher1Fit;
+            loserFit = teacher2Fit;
             this.addLog(`\n🏆 ${this.teacher1.name}'s lesson plan better aligns with the scenario requirements!`);
         } else if (teacher2Fit > teacher1Fit) {
             winner = this.teacher2;
             loser = this.teacher1;
+            winnerFit = teacher2Fit;
+            loserFit = teacher1Fit;
             this.addLog(`\n🏆 ${this.teacher2.name}'s lesson plan better aligns with the scenario requirements!`);
         } else {
             this.addLog(`\n🤝 Both lesson plans are equally aligned with the framework!`);
@@ -225,11 +229,209 @@ class LessonPlanningChallenge {
             this.addLog(`\n📝 ${winner.name} earns a win in their teaching record!`);
         }
 
+        // Show big visual results modal
+        this.showResultsModal(winner, loser, winnerFit, loserFit, teacher1Fit, teacher2Fit);
+
         return winner;
     }
 
     delay(ms) {
         return new Promise(resolve => setTimeout(resolve, ms));
+    }
+
+    showResultsModal(winner, loser, winnerFit, loserFit, teacher1Fit, teacher2Fit) {
+        // Create modal overlay
+        const modal = document.createElement('div');
+        modal.id = 'results-modal';
+        modal.style.cssText = `
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.85);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 10000;
+            animation: fadeIn 0.3s ease;
+        `;
+
+        let resultsHTML;
+
+        if (winner) {
+            // Winner announced
+            resultsHTML = `
+                <div style="
+                    background: white;
+                    border-radius: 20px;
+                    padding: 40px;
+                    max-width: 600px;
+                    width: 90%;
+                    box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+                    text-align: center;
+                    animation: slideIn 0.5s ease;
+                ">
+                    <div style="font-size: 5em; margin-bottom: 20px; animation: bounce 0.8s ease;">🏆</div>
+                    <h2 style="color: var(--accent-color); font-size: 2.5em; margin-bottom: 10px;">
+                        ${winner.name} Wins!
+                    </h2>
+                    <p style="font-size: 1.3em; color: #666; margin-bottom: 30px;">
+                        Best Lesson Plan for the Scenario
+                    </p>
+
+                    <!-- Score Comparison -->
+                    <div style="
+                        background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+                        border-radius: 15px;
+                        padding: 25px;
+                        margin-bottom: 25px;
+                    ">
+                        <h3 style="color: var(--dark-bg); margin-bottom: 20px;">Framework Alignment Scores</h3>
+
+                        <div style="display: flex; justify-content: space-around; margin-bottom: 20px;">
+                            <div style="flex: 1; padding: 15px;">
+                                <div style="font-weight: bold; color: var(--secondary-color); margin-bottom: 5px;">
+                                    ${winner.name}
+                                </div>
+                                <div style="
+                                    font-size: 3em;
+                                    font-weight: bold;
+                                    color: var(--success-color);
+                                    text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+                                ">
+                                    ${winnerFit}%
+                                </div>
+                            </div>
+
+                            <div style="
+                                font-size: 3em;
+                                color: #ccc;
+                                display: flex;
+                                align-items: center;
+                            ">vs</div>
+
+                            <div style="flex: 1; padding: 15px;">
+                                <div style="font-weight: bold; color: var(--secondary-color); margin-bottom: 5px;">
+                                    ${loser.name}
+                                </div>
+                                <div style="
+                                    font-size: 3em;
+                                    font-weight: bold;
+                                    color: #e74c3c;
+                                    text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+                                ">
+                                    ${loserFit}%
+                                </div>
+                            </div>
+                        </div>
+
+                        <div style="
+                            background: white;
+                            border-radius: 10px;
+                            padding: 15px;
+                            margin-top: 15px;
+                        ">
+                            <div style="font-size: 1.2em; color: var(--accent-color); font-weight: bold;">
+                                Margin of Victory: ${Math.abs(winnerFit - loserFit)}%
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Updated Record -->
+                    <div style="
+                        background: var(--light-bg);
+                        border-radius: 10px;
+                        padding: 20px;
+                        margin-bottom: 25px;
+                    ">
+                        <h4 style="color: var(--dark-bg); margin-bottom: 10px;">Updated Teaching Record</h4>
+                        <div style="font-size: 1.1em;">
+                            <strong>${winner.name}:</strong>
+                            <span style="color: var(--success-color); font-weight: bold;">${winner.wins} Wins</span> -
+                            <span style="color: #e74c3c; font-weight: bold;">${winner.losses} Losses</span>
+                        </div>
+                    </div>
+
+                    <button onclick="document.getElementById('results-modal').remove(); location.reload();" style="
+                        background: var(--accent-color);
+                        color: white;
+                        border: none;
+                        padding: 15px 40px;
+                        border-radius: 10px;
+                        font-size: 1.2em;
+                        font-weight: bold;
+                        cursor: pointer;
+                        transition: all 0.3s ease;
+                        box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+                    " onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 6px 16px rgba(0,0,0,0.3)';"
+                       onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 4px 12px rgba(0,0,0,0.2)';">
+                        🎯 New Challenge
+                    </button>
+                </div>
+            `;
+        } else {
+            // Tie game
+            resultsHTML = `
+                <div style="
+                    background: white;
+                    border-radius: 20px;
+                    padding: 40px;
+                    max-width: 600px;
+                    width: 90%;
+                    box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+                    text-align: center;
+                    animation: slideIn 0.5s ease;
+                ">
+                    <div style="font-size: 5em; margin-bottom: 20px;">🤝</div>
+                    <h2 style="color: var(--secondary-color); font-size: 2.5em; margin-bottom: 10px;">
+                        It's a Tie!
+                    </h2>
+                    <p style="font-size: 1.3em; color: #666; margin-bottom: 30px;">
+                        Both lesson plans are equally aligned with the framework
+                    </p>
+
+                    <div style="
+                        background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+                        border-radius: 15px;
+                        padding: 25px;
+                        margin-bottom: 25px;
+                    ">
+                        <h3 style="color: var(--dark-bg); margin-bottom: 20px;">Framework Alignment Score</h3>
+                        <div style="
+                            font-size: 3.5em;
+                            font-weight: bold;
+                            color: var(--secondary-color);
+                            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+                        ">
+                            ${teacher1Fit}%
+                        </div>
+                        <div style="margin-top: 10px; font-size: 1.1em; color: #666;">
+                            ${this.teacher1.name} and ${this.teacher2.name}
+                        </div>
+                    </div>
+
+                    <button onclick="document.getElementById('results-modal').remove(); location.reload();" style="
+                        background: var(--secondary-color);
+                        color: white;
+                        border: none;
+                        padding: 15px 40px;
+                        border-radius: 10px;
+                        font-size: 1.2em;
+                        font-weight: bold;
+                        cursor: pointer;
+                        transition: all 0.3s ease;
+                        box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+                    " onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 6px 16px rgba(0,0,0,0.3)';"
+                       onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 4px 12px rgba(0,0,0,0.2)';">
+                        🎯 New Challenge
+                    </button>
+                </div>
+            `;
+        }
+
+        modal.innerHTML = resultsHTML;
+        document.body.appendChild(modal);
     }
 }
 
