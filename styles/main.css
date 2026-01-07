@@ -114,7 +114,7 @@ body {
 /* Login Screen */
 .login-container {
     text-align: center;
-    max-width: 600px;
+    max-width: 1200px;
     margin: 0 auto;
 }
 
@@ -125,14 +125,14 @@ body {
 
 .teacher-list {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    grid-template-columns: repeat(5, 1fr);
     gap: 15px;
     margin-bottom: 30px;
 }
 
 .teacher-card {
     background: linear-gradient(135deg, var(--light-bg) 0%, white 100%);
-    padding: 20px;
+    padding: 15px;
     border-radius: 10px;
     cursor: pointer;
     transition: all 0.3s ease;
@@ -544,9 +544,25 @@ body {
 }
 
 /* Responsive Design */
+@media (max-width: 1200px) {
+    .teacher-list {
+        grid-template-columns: repeat(4, 1fr);
+    }
+}
+
+@media (max-width: 992px) {
+    .teacher-list {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+
 @media (max-width: 768px) {
     .main-header h1 {
         font-size: 1.5em;
+    }
+
+    .teacher-list {
+        grid-template-columns: repeat(2, 1fr);
     }
 
     .battle-field {
@@ -558,6 +574,12 @@ body {
     }
 
     .earn-cards-container {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 480px) {
+    .teacher-list {
         grid-template-columns: 1fr;
     }
 }
