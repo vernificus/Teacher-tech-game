@@ -8,6 +8,7 @@ A web app where teachers create lesson plans using instructional technology tool
 - **🎓 Lesson Planning Challenges**: Create lesson plans for real classroom scenarios
 - **📐 LCPS Framework Alignment**: Tools rated on Student Centered, Design, Engage, Assess, and Reflect & Respond
 - **🎴 Tool Collection**: 19 instructional technology tools with framework-aligned stats
+- **🖼️ Custom Card Images**: Use your own card designs from PDF - automatically displays images with emoji fallback
 - **👥 Staff Tracking**: 155+ staff members with tool access synced from your sheet
 - **🔄 Real-time Sync**: Click the sync button to refresh from your Google Sheet
 - **💾 Smart Caching**: Challenge records preserved while tool ownership updates
@@ -48,6 +49,7 @@ See [GOOGLE-SHEETS-INTEGRATION.md](GOOGLE-SHEETS-INTEGRATION.md) for full detail
 - **[SETUP.md](SETUP.md)** - Detailed setup and usage guide
 - **[GOOGLE-SHEETS-INTEGRATION.md](GOOGLE-SHEETS-INTEGRATION.md)** - Google Sheets sync documentation
 - **[CUSTOMIZATION.md](CUSTOMIZATION.md)** - How to customize cards and stats
+- **[CARD-IMAGES.md](CARD-IMAGES.md)** - How to add custom card images from your PDF
 
 ## ✨ Current Technology Cards
 

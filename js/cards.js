@@ -6,18 +6,30 @@ function createCardElement(card, isOwned = true, size = 'normal') {
     cardDiv.dataset.cardId = card.id;
 
     if (size === 'mini') {
+        // Mini card - use image if available, fallback to icon
+        const imageDisplay = card.image ?
+            `<img src="${card.image}" alt="${card.name}" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+             <div style="display: none; font-size: 2em;">${card.icon}</div>` :
+            `<div style="font-size: 2em;">${card.icon}</div>`;
+
         cardDiv.innerHTML = `
-            <div>${card.icon}</div>
+            ${imageDisplay}
             <div style="font-size: 0.7em; margin-top: 5px;">${card.name}</div>
         `;
     } else {
+        // Full card - use image if available, fallback to icon
+        const imageDisplay = card.image ?
+            `<img src="${card.image}" alt="${card.name}" class="card-img" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+             <div class="card-icon-fallback" style="display: none;">${card.icon}</div>` :
+            `<div class="card-icon-fallback">${card.icon}</div>`;
+
         cardDiv.innerHTML = `
             <div class="card-header">
                 <span class="card-name">${card.name}</span>
                 <span class="card-type">${card.type}</span>
             </div>
             <div class="card-image">
-                ${card.icon}
+                ${imageDisplay}
             </div>
             <div class="card-stats">
                 <div class="stat-row">
@@ -58,7 +70,15 @@ function showCardModal(card) {
     const modal = document.getElementById('card-modal');
     const modalContent = document.getElementById('modal-card-detail');
 
+    // Use image if available, fallback to icon
+    const cardImage = card.image ?
+        `<img src="${card.image}" alt="${card.name}" style="max-width: 250px; max-height: 350px; border-radius: 10px; margin-bottom: 20px;" onerror="this.style.display='none';">` :
+        `<div style="font-size: 5em; margin-bottom: 20px;">${card.icon}</div>`;
+
     modalContent.innerHTML = `
+        <div style="text-align: center;">
+            ${cardImage}
+        </div>
         <h2 style="color: var(--dark-bg); margin-bottom: 20px;">${card.icon} ${card.name}</h2>
         <div class="card-stats" style="margin-bottom: 20px;">
             <div class="stat-row">

@@ -12,97 +12,97 @@ const SHEET_CONFIG = {
 // Framework components: Student Centered, Design, Engage, Assess, Reflect & Respond
 const TOOL_STATS = {
     'Schoology': {
-        type: 'LMS', icon: '📚',
+        type: 'LMS', icon: '📚', image: 'images/cards/schoology.png',
         studentCentered: 75, design: 80, engage: 70, assess: 90, reflectRespond: 85,
         description: 'Learning management system for organizing assignments, communication, and tracking student progress'
     },
     'Magma Math': {
-        type: 'Math', icon: '🔢',
+        type: 'Math', icon: '🔢', image: 'images/cards/magma-math.png',
         studentCentered: 90, design: 75, engage: 85, assess: 95, reflectRespond: 90,
         description: 'Adaptive math practice that personalizes to each student with real-time formative assessment'
     },
     'Kiddom Math': {
-        type: 'Math', icon: '➕',
+        type: 'Math', icon: '➕', image: 'images/cards/kiddom-math.png',
         studentCentered: 80, design: 85, engage: 75, assess: 90, reflectRespond: 80,
         description: 'Standards-aligned math curriculum with customizable assessments and data tracking'
     },
     'DiscoveryED': {
-        type: 'Content', icon: '🔬',
+        type: 'Content', icon: '🔬', image: 'images/cards/discoveryed.png',
         studentCentered: 70, design: 85, engage: 80, assess: 70, reflectRespond: 65,
         description: 'High-quality digital curriculum resources and educational videos across content areas'
     },
     'Lexia': {
-        type: 'Literacy', icon: '📖',
+        type: 'Literacy', icon: '📖', image: 'images/cards/lexia.png',
         studentCentered: 95, design: 80, engage: 85, assess: 95, reflectRespond: 90,
         description: 'Adaptive literacy instruction that personalizes pathways and provides detailed progress monitoring'
     },
     'Adobe Express': {
-        type: 'Design', icon: '🎨',
+        type: 'Design', icon: '🎨', image: 'images/cards/adobe-express.png',
         studentCentered: 80, design: 90, engage: 85, assess: 60, reflectRespond: 70,
         description: 'Creative design tool enabling students to express learning through graphics, videos, and multimedia'
     },
     'Canva': {
-        type: 'Design', icon: '🖼️',
+        type: 'Design', icon: '🖼️', image: 'images/cards/canva.png',
         studentCentered: 85, design: 90, engage: 90, assess: 65, reflectRespond: 70,
         description: 'Intuitive design platform for creating visual content and demonstrating understanding creatively'
     },
     'Performance Matters': {
-        type: 'Assessment', icon: '📊',
+        type: 'Assessment', icon: '📊', image: 'images/cards/performance-matters.png',
         studentCentered: 75, design: 85, engage: 60, assess: 95, reflectRespond: 95,
         description: 'Comprehensive assessment and data analysis platform for tracking student growth and informing instruction'
     },
     'Phoenix Gradebook': {
-        type: 'Grading', icon: '📝',
+        type: 'Grading', icon: '📝', image: 'images/cards/phoenix-gradebook.png',
         studentCentered: 70, design: 75, engage: 60, assess: 85, reflectRespond: 90,
         description: 'Student information and gradebook system for tracking progress and communicating with families'
     },
     'Nearpod': {
-        type: 'Interactive', icon: '📱',
+        type: 'Interactive', icon: '📱', image: 'images/cards/nearpod.png',
         studentCentered: 85, design: 85, engage: 95, assess: 90, reflectRespond: 85,
         description: 'Interactive lesson platform with real-time engagement, formative assessment, and virtual experiences'
     },
     'Brainpop': {
-        type: 'Content', icon: '🧠',
+        type: 'Content', icon: '🧠', image: 'images/cards/brainpop.png',
         studentCentered: 75, design: 80, engage: 85, assess: 80, reflectRespond: 70,
         description: 'Animated educational videos with quizzes and activities that make complex concepts accessible'
     },
     'Wixie': {
-        type: 'Creativity', icon: '✨',
+        type: 'Creativity', icon: '✨', image: 'images/cards/wixie.png',
         studentCentered: 85, design: 90, engage: 90, assess: 70, reflectRespond: 75,
         description: 'Creative platform for digital storytelling, student voice, and demonstrating learning through creation'
     },
     'Blooket': {
-        type: 'Game', icon: '🎮',
+        type: 'Game', icon: '🎮', image: 'images/cards/blooket.png',
         studentCentered: 80, design: 75, engage: 95, assess: 85, reflectRespond: 80,
         description: 'Game-based learning platform that motivates students through competition and immediate feedback'
     },
     'Newsela': {
-        type: 'Literacy', icon: '📰',
+        type: 'Literacy', icon: '📰', image: 'images/cards/newsela.png',
         studentCentered: 90, design: 85, engage: 80, assess: 85, reflectRespond: 80,
         description: 'Leveled reading content across subjects, providing differentiated texts and comprehension tracking'
     },
     'WeVideo': {
-        type: 'Video', icon: '🎬',
+        type: 'Video', icon: '🎬', image: 'images/cards/wevideo.png',
         studentCentered: 85, design: 85, engage: 90, assess: 70, reflectRespond: 75,
         description: 'Cloud-based video creation enabling students to demonstrate learning through multimedia storytelling'
     },
     'Ozobot': {
-        type: 'Coding', icon: '🤖',
+        type: 'Coding', icon: '🤖', image: 'images/cards/ozobot.png',
         studentCentered: 85, design: 80, engage: 95, assess: 75, reflectRespond: 80,
         description: 'Hands-on programmable robot for teaching coding and computational thinking through play'
     },
     'Gemini': {
-        type: 'AI', icon: '💎',
+        type: 'AI', icon: '💎', image: 'images/cards/gemini.png',
         studentCentered: 85, design: 90, engage: 85, assess: 75, reflectRespond: 85,
         description: 'AI assistant for research, brainstorming, and content creation to support personalized learning'
     },
     'Copilot': {
-        type: 'AI', icon: '🚀',
+        type: 'AI', icon: '🚀', image: 'images/cards/copilot.png',
         studentCentered: 85, design: 90, engage: 85, assess: 75, reflectRespond: 85,
         description: 'AI-powered assistant for writing, coding, and problem-solving to scaffold student learning'
     },
     'Student Choice': {
-        type: 'Flexible', icon: '⭐',
+        type: 'Flexible', icon: '⭐', image: 'images/cards/student-choice.png',
         studentCentered: 95, design: 85, engage: 90, assess: 70, reflectRespond: 80,
         description: 'Empowers students to select tools that best match their learning preferences and needs'
     }
@@ -207,6 +207,7 @@ async function loadDataFromSheets() {
             const stats = TOOL_STATS[toolName] || {
                 type: 'Technology',
                 icon: '💻',
+                image: null,
                 studentCentered: 75,
                 design: 75,
                 engage: 75,
@@ -220,6 +221,7 @@ async function loadDataFromSheets() {
                 name: toolName,
                 type: stats.type,
                 icon: stats.icon,
+                image: stats.image,
                 studentCentered: stats.studentCentered,
                 design: stats.design,
                 engage: stats.engage,
