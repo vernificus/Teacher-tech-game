@@ -5,6 +5,11 @@ function createCardElement(card, isOwned = true, size = 'normal', masteryLevel =
     cardDiv.className = `tech-card ${!isOwned ? 'locked' : ''} ${size === 'mini' ? 'mini-card' : ''} ${isOwned && masteryLevel > 1 ? `mastery-${masteryLevel}` : ''}`;
     cardDiv.dataset.cardId = card.id;
 
+    // Add rarity attribute for visual effects
+    if (card.rarity) {
+        cardDiv.dataset.rarity = card.rarity;
+    }
+
     if (size === 'mini') {
         // Mini card - use image if available, fallback to icon
         const imageDisplay = card.image ?
@@ -78,11 +83,62 @@ function showCardModal(card) {
         `<img src="${card.image}" alt="${card.name}" style="max-width: 250px; max-height: 350px; border-radius: 10px; margin-bottom: 20px;" onerror="this.style.display='none';">` :
         `<div style="font-size: 5em; margin-bottom: 20px;">${card.icon}</div>`;
 
+    // Physical card metadata section (only if available)
+    const physicalCardInfo = card.cardNumber ? `
+        <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); padding: 15px; border-radius: 8px; margin-bottom: 20px; color: white;">
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 10px;">
+                <div>
+                    <strong>Card #:</strong> ${card.cardNumber}
+                </div>
+                <div>
+                    <strong>Rarity:</strong> ${card.rarity}
+                </div>
+                <div>
+                    <strong>Ease of Use:</strong> ${card.easeOfUse}
+                </div>
+                <div>
+                    <strong>Grade Level:</strong> ${card.gradeLevel}
+                </div>
+                <div>
+                    <strong>Setup Time:</strong> ${card.setupTime}
+                </div>
+            </div>
+        </div>
+    ` : '';
+
+    // Teacher tip section (only if available)
+    const teacherTipSection = card.teacherTip ? `
+        <div style="background: #fff3cd; border-left: 4px solid #ffc107; padding: 15px; border-radius: 8px; margin-bottom: 20px;">
+            <div style="display: flex; align-items: start; gap: 10px;">
+                <div style="font-size: 1.5em;">💡</div>
+                <div>
+                    <strong style="color: #856404;">Teacher Tip:</strong>
+                    <p style="margin-top: 5px; color: #856404;">${card.teacherTip}</p>
+                </div>
+            </div>
+        </div>
+    ` : '';
+
+    // QR Code section (only if available)
+    const qrCodeSection = card.qrCodeSVG ? `
+        <div style="background: white; padding: 20px; border-radius: 8px; margin-bottom: 20px; border: 2px solid var(--primary-color); text-align: center;">
+            <h3 style="margin-bottom: 15px; color: var(--dark-bg);">📱 Scan to Learn More</h3>
+            <div style="display: flex; justify-content: center; align-items: center; margin-bottom: 10px;">
+                ${card.qrCodeSVG}
+            </div>
+            <p style="font-size: 0.9em; color: #666;">Scan with your phone to access resources</p>
+        </div>
+    ` : '';
+
     modalContent.innerHTML = `
         <div style="text-align: center;">
             ${cardImage}
         </div>
         <h2 style="color: var(--dark-bg); margin-bottom: 20px;">${card.icon} ${card.name}</h2>
+
+        ${physicalCardInfo}
+        ${teacherTipSection}
+
         <div class="card-stats" style="margin-bottom: 20px;">
             <div class="stat-row">
                 <span class="stat-label">Type:</span>
@@ -113,10 +169,14 @@ function showCardModal(card) {
                 <span class="stat-value">${card.studentCentered + card.design + card.engage + card.assess + card.reflectRespond}</span>
             </div>
         </div>
+
         <div style="margin-bottom: 15px;">
             <strong>Description:</strong>
             <p style="margin-top: 10px; color: #555;">${card.description}</p>
         </div>
+
+        ${qrCodeSection}
+
         <div style="background: var(--light-bg); padding: 10px; border-radius: 8px; margin-bottom: 15px;">
             <strong>PD Code:</strong> <code style="background: white; padding: 5px 10px; border-radius: 5px;">${card.pdCode}</code>
         </div>
