@@ -69,6 +69,50 @@ const SCENARIOS = [
             reflectRespond: 95    // Continuous feedback loops
         },
         cardsNeeded: 5
+    },
+    // BOSS BATTLES - Extra challenging scenarios
+    {
+        id: 6,
+        title: "🔥 BOSS BATTLE: WiFi is Down!",
+        description: "EMERGENCY: The school WiFi has been down for 3 days. You need to teach a full day of lessons using ONLY offline-capable tools. Your students are getting restless and you need to maintain engagement and learning progress.",
+        requirements: {
+            studentCentered: 85,
+            design: 95,           // Must be extremely well-designed for offline
+            engage: 90,           // Keep students engaged without internet
+            assess: 80,
+            reflectRespond: 85
+        },
+        cardsNeeded: 4,
+        isBossBattle: true,
+        requireOffline: true      // Special constraint: only offline tools allowed
+    },
+    {
+        id: 7,
+        title: "🔥 BOSS BATTLE: Emergency Sub Plans",
+        description: "You're out sick and need to create comprehensive sub plans at 6 AM that will work for ANY substitute teacher. Plans must be crystal clear, engaging, and allow students to work independently while maintaining rigor.",
+        requirements: {
+            studentCentered: 90,
+            design: 100,          // Must be incredibly well-designed
+            engage: 95,
+            assess: 90,           // Sub needs to assess understanding
+            reflectRespond: 80
+        },
+        cardsNeeded: 5,
+        isBossBattle: true
+    },
+    {
+        id: 8,
+        title: "🔥 BOSS BATTLE: 1:1 Device Mandate",
+        description: "URGENT: Your principal just mandated that every lesson must actively use technology for at least 70% of class time, starting tomorrow. Plan a full week of lessons that meet this requirement while maintaining pedagogical best practices.",
+        requirements: {
+            studentCentered: 85,
+            design: 90,
+            engage: 100,          // Must be highly engaging with tech
+            assess: 90,
+            reflectRespond: 85
+        },
+        cardsNeeded: 5,
+        isBossBattle: true
     }
 ];
 
@@ -133,7 +177,103 @@ class LessonPlanningChallenge {
             scores[key] = Math.round(scores[key] / cardCount);
         });
 
+        // Check for tool synergies and apply combo bonuses
+        const appliedCombos = this.detectSynergies(cards, scores);
+
+        // Store combo info for display later
+        scores._combos = appliedCombos;
+
         return scores;
+    }
+
+    detectSynergies(cards, scores) {
+        // Define synergy combinations
+        const SYNERGIES = [
+            {
+                tools: ['Canva', 'Nearpod'],
+                bonusStat: 'engage',
+                amount: 10,
+                name: 'Visual Engagement',
+                description: 'Beautiful design + interactive delivery = captivated students'
+            },
+            {
+                tools: ['Google Classroom', 'Wakelet'],
+                bonusStat: 'design',
+                amount: 8,
+                name: 'Workflow Master',
+                description: 'Seamless integration for organized content delivery'
+            },
+            {
+                tools: ['Kahoot!', 'Gimkit'],
+                bonusStat: 'assess',
+                amount: 12,
+                name: 'Assessment Arsenal',
+                description: 'Multiple game-based assessment tools for deep understanding'
+            },
+            {
+                tools: ['Flipgrid', 'Padlet'],
+                bonusStat: 'studentCentered',
+                amount: 10,
+                name: 'Student Voice',
+                description: 'Empowering students to share and collaborate authentically'
+            },
+            {
+                tools: ['Edpuzzle', 'Screencastify'],
+                bonusStat: 'design',
+                amount: 8,
+                name: 'Video Learning Suite',
+                description: 'Create and enhance video content for asynchronous learning'
+            },
+            {
+                tools: ['Seesaw', 'BookCreator'],
+                bonusStat: 'reflectRespond',
+                amount: 10,
+                name: 'Portfolio Power',
+                description: 'Document learning journey with reflection and creativity'
+            },
+            {
+                tools: ['Quizlet', 'Kahoot!'],
+                bonusStat: 'engage',
+                amount: 8,
+                name: 'Study & Play',
+                description: 'Practice meets gamification for retention'
+            },
+            {
+                tools: ['Mentimeter', 'Nearpod'],
+                bonusStat: 'assess',
+                amount: 9,
+                name: 'Real-Time Feedback',
+                description: 'Instant formative assessment to guide instruction'
+            },
+            {
+                tools: ['Scratch', 'Classcraft'],
+                bonusStat: 'engage',
+                amount: 11,
+                name: 'Gaming & Coding',
+                description: 'Computational thinking meets classroom gamification'
+            },
+            {
+                tools: ['Wakelet', 'Padlet'],
+                bonusStat: 'design',
+                amount: 7,
+                name: 'Curation Combo',
+                description: 'Organize and share resources beautifully'
+            }
+        ];
+
+        const appliedCombos = [];
+        const cardNames = cards.map(c => c.name);
+
+        SYNERGIES.forEach(synergy => {
+            if (synergy.tools.every(tool => cardNames.includes(tool))) {
+                scores[synergy.bonusStat] += synergy.amount;
+                appliedCombos.push(synergy);
+                this.addLog(`✨ SYNERGY BONUS: ${synergy.name}! (+${synergy.amount} ${synergy.bonusStat})`);
+                this.addLog(`   💡 ${synergy.description}`);
+            }
+        });
+
+        return appliedCombos;
     }
 
     calculateFitScore(lessonScores, requirements) {
@@ -155,6 +295,16 @@ class LessonPlanningChallenge {
         if (this.teacher1Cards.length !== this.scenario.cardsNeeded) {
             this.addLog(`⚠️ Please select exactly ${this.scenario.cardsNeeded} tools for your lesson plan.`);
             return null;
+        }
+
+        // Check boss battle constraints
+        if (this.scenario.requireOffline) {
+            const onlineTools = this.teacher1Cards.filter(card => !card.offline);
+            if (onlineTools.length > 0) {
+                this.addLog(`⚠️ BOSS BATTLE FAILED: WiFi is down! These tools require internet: ${onlineTools.map(c => c.name).join(', ')}`);
+                this.addLog(`💡 Hint: Only use tools marked as "Works Offline" for this challenge!`);
+                return null;
+            }
         }
 
         // Auto-select cards for opponent
@@ -240,6 +390,70 @@ class LessonPlanningChallenge {
     }
 
     showResultsModal(winner, loser, winnerFit, loserFit, teacher1Fit, teacher2Fit) {
+        // Get the lesson scores for visualization
+        const teacher1LessonScores = this.calculateLessonScore(this.teacher1Cards);
+        const teacher2LessonScores = this.calculateLessonScore(this.teacher2Cards);
+
+        // Create framework comparison bars
+        const frameworkComponents = [
+            { key: 'studentCentered', label: '👥 Student Centered', icon: '👥' },
+            { key: 'design', label: '📐 Design', icon: '📐' },
+            { key: 'engage', label: '🎯 Engage', icon: '🎯' },
+            { key: 'assess', label: '📊 Assess', icon: '📊' },
+            { key: 'reflectRespond', label: '🔄 Reflect & Respond', icon: '🔄' }
+        ];
+
+        let frameworkBarsHTML = '';
+        frameworkComponents.forEach(comp => {
+            const teacher1Score = teacher1LessonScores[comp.key];
+            const teacher2Score = teacher2LessonScores[comp.key];
+            const required = this.scenario.requirements[comp.key];
+
+            frameworkBarsHTML += `
+                <div style="margin-bottom: 15px;">
+                    <div style="display: flex; justify-content: space-between; margin-bottom: 5px;">
+                        <span style="font-weight: bold; font-size: 0.9em;">${comp.icon} ${comp.label}</span>
+                        <span style="font-size: 0.8em; color: #666;">Target: ${required}</span>
+                    </div>
+                    <div style="display: flex; gap: 10px; align-items: center;">
+                        <div style="flex: 1;">
+                            <div style="background: #e0e0e0; height: 24px; border-radius: 12px; overflow: hidden; position: relative;">
+                                <div style="
+                                    background: ${winner && winner.id === this.teacher1.id ? 'var(--success-color)' : '#3498db'};
+                                    height: 100%;
+                                    width: ${Math.min(100, (teacher1Score / 100) * 100)}%;
+                                    display: flex;
+                                    align-items: center;
+                                    justify-content: center;
+                                    color: white;
+                                    font-weight: bold;
+                                    font-size: 0.8em;
+                                    transition: width 0.5s ease;
+                                ">${teacher1Score}</div>
+                            </div>
+                        </div>
+                        <div style="width: 30px; text-align: center; font-weight: bold; color: #999;">vs</div>
+                        <div style="flex: 1;">
+                            <div style="background: #e0e0e0; height: 24px; border-radius: 12px; overflow: hidden; position: relative;">
+                                <div style="
+                                    background: ${winner && winner.id === this.teacher2.id ? 'var(--success-color)' : '#e74c3c'};
+                                    height: 100%;
+                                    width: ${Math.min(100, (teacher2Score / 100) * 100)}%;
+                                    display: flex;
+                                    align-items: center;
+                                    justify-content: center;
+                                    color: white;
+                                    font-weight: bold;
+                                    font-size: 0.8em;
+                                    transition: width 0.5s ease;
+                                ">${teacher2Score}</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+        });
+
         // Create modal overlay
         const modal = document.createElement('div');
         modal.id = 'results-modal';
@@ -255,6 +469,8 @@ class LessonPlanningChallenge {
             justify-content: center;
             z-index: 10000;
             animation: fadeIn 0.3s ease;
+            overflow-y: auto;
+            padding: 20px;
         `;
 
         let resultsHTML;
@@ -266,11 +482,13 @@ class LessonPlanningChallenge {
                     background: white;
                     border-radius: 20px;
                     padding: 40px;
-                    max-width: 600px;
+                    max-width: 800px;
                     width: 90%;
                     box-shadow: 0 20px 60px rgba(0,0,0,0.5);
                     text-align: center;
                     animation: slideIn 0.5s ease;
+                    max-height: 90vh;
+                    overflow-y: auto;
                 ">
                     <div style="font-size: 5em; margin-bottom: 20px; animation: bounce 0.8s ease;">🏆</div>
                     <h2 style="color: var(--accent-color); font-size: 2.5em; margin-bottom: 10px;">
@@ -280,57 +498,32 @@ class LessonPlanningChallenge {
                         Best Lesson Plan for the Scenario
                     </p>
 
-                    <!-- Score Comparison -->
+                    <!-- Framework Comparison Bars -->
                     <div style="
                         background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
                         border-radius: 15px;
                         padding: 25px;
                         margin-bottom: 25px;
+                        text-align: left;
                     ">
-                        <h3 style="color: var(--dark-bg); margin-bottom: 20px;">Framework Alignment Scores</h3>
-
-                        <div style="display: flex; justify-content: space-around; margin-bottom: 20px;">
-                            <div style="flex: 1; padding: 15px;">
-                                <div style="font-weight: bold; color: var(--secondary-color); margin-bottom: 5px;">
-                                    ${winner.name}
-                                </div>
-                                <div style="
-                                    font-size: 3em;
-                                    font-weight: bold;
-                                    color: var(--success-color);
-                                    text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
-                                ">
-                                    ${winnerFit}%
-                                </div>
+                        <h3 style="color: var(--dark-bg); margin-bottom: 20px; text-align: center;">📊 Framework Component Breakdown</h3>
+                        <div style="display: flex; justify-content: space-around; margin-bottom: 20px; text-align: center;">
+                            <div>
+                                <div style="font-weight: bold; color: var(--secondary-color);">${this.teacher1.name}</div>
+                                <div style="font-size: 1.5em; font-weight: bold; color: var(--success-color);">${teacher1Fit}%</div>
                             </div>
-
-                            <div style="
-                                font-size: 3em;
-                                color: #ccc;
-                                display: flex;
-                                align-items: center;
-                            ">vs</div>
-
-                            <div style="flex: 1; padding: 15px;">
-                                <div style="font-weight: bold; color: var(--secondary-color); margin-bottom: 5px;">
-                                    ${loser.name}
-                                </div>
-                                <div style="
-                                    font-size: 3em;
-                                    font-weight: bold;
-                                    color: #e74c3c;
-                                    text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
-                                ">
-                                    ${loserFit}%
-                                </div>
+                            <div>
+                                <div style="font-weight: bold; color: var(--secondary-color);">${this.teacher2.name}</div>
+                                <div style="font-size: 1.5em; font-weight: bold; color: #e74c3c;">${teacher2Fit}%</div>
                             </div>
                         </div>
-
+                        ${frameworkBarsHTML}
                         <div style="
                             background: white;
                             border-radius: 10px;
                             padding: 15px;
-                            margin-top: 15px;
+                            margin-top: 20px;
+                            text-align: center;
                         ">
                             <div style="font-size: 1.2em; color: var(--accent-color); font-weight: bold;">
                                 Margin of Victory: ${Math.abs(winnerFit - loserFit)}%
@@ -455,13 +648,22 @@ function initiateChallenge(opponent) {
     document.getElementById('player2-name').textContent = opponent.name;
 
     // Display scenario
+    const bossBattleStyle = scenario.isBossBattle ?
+        'background: linear-gradient(135deg, #ff6b6b 0%, #ffd700 100%); border-left: 5px solid #ff0000; animation: pulse 2s ease-in-out infinite;' :
+        'background: var(--light-bg); border-left: 5px solid var(--primary-color);';
+
+    const constraintWarning = scenario.requireOffline ?
+        '<div style="background: #fff3cd; border: 2px solid #ffc107; padding: 10px; border-radius: 8px; margin-top: 10px;"><strong>⚠️ SPECIAL CONSTRAINT:</strong> WiFi is down! You can ONLY use offline-capable tools.</div>' :
+        '';
+
     document.getElementById('scenario-display').innerHTML = `
-        <div style="background: var(--light-bg); padding: 20px; border-radius: 10px; border-left: 5px solid var(--primary-color);">
-            <h3 style="color: var(--accent-color); margin-bottom: 10px;">📋 ${scenario.title}</h3>
-            <p style="margin-bottom: 15px;">${scenario.description}</p>
+        <div style="${bossBattleStyle} padding: 20px; border-radius: 10px;">
+            <h3 style="color: ${scenario.isBossBattle ? '#8b0000' : 'var(--accent-color)'}; margin-bottom: 10px;">${scenario.title}</h3>
+            <p style="margin-bottom: 15px; ${scenario.isBossBattle ? 'font-weight: bold;' : ''}">${scenario.description}</p>
             <p style="font-weight: bold; color: var(--secondary-color);">
                 Select ${scenario.cardsNeeded} tools to create the best lesson plan for this scenario.
             </p>
+            ${constraintWarning}
         </div>
     `;
 

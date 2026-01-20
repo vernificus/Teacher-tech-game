@@ -45,6 +45,12 @@ function setupEventListeners() {
     // Earn cards functionality
     document.getElementById('redeem-pd-btn').addEventListener('click', handleRedeemPDCode);
     document.getElementById('submit-usage-btn').addEventListener('click', handleSubmitUsage);
+    document.getElementById('submit-scenario-btn').addEventListener('click', handleSubmitScenario);
+
+    // Leaderboard filter
+    document.getElementById('department-filter').addEventListener('change', (e) => {
+        renderLeaderboard(e.target.value);
+    });
 }
 
 function showLogin() {
@@ -98,11 +104,17 @@ function renderTeacherList() {
 
 function handleAddTeacher() {
     const name = prompt('Enter teacher name:');
-    if (name && name.trim()) {
-        const newTeacher = addTeacher(name.trim());
-        setCurrentTeacher(newTeacher);
-        showDashboard();
-    }
+    if (!name || !name.trim()) return;
+
+    const gradeLevel = prompt('Enter grade level (e.g., "3rd Grade", "5th Grade", "8th Grade"):');
+    if (!gradeLevel || !gradeLevel.trim()) return;
+
+    const department = prompt('Enter department (e.g., "Elementary", "Middle School", "High School"):');
+    if (!department || !department.trim()) return;
+
+    const newTeacher = addTeacher(name.trim(), gradeLevel.trim(), department.trim());
+    setCurrentTeacher(newTeacher);
+    showDashboard();
 }
 
 function handleLogout() {
@@ -140,6 +152,9 @@ function switchView(viewName) {
         case 'earn-cards':
             // Already populated on dashboard load
             break;
+        case 'leaderboard':
+            renderLeaderboard();
+            break;
     }
 }
 
@@ -174,6 +189,98 @@ function renderOpponentList() {
         });
 
         opponentList.appendChild(opponentCard);
+    });
+}
+
+function renderLeaderboard(departmentFilter = 'all') {
+    const { byCards, byWinRate } = getLeaderboardData(departmentFilter);
+    const departmentStats = getDepartmentStats();
+
+    // Render cards leaderboard
+    const cardsLeaderboard = document.getElementById('cards-leaderboard');
+    cardsLeaderboard.innerHTML = '';
+
+    if (byCards.length === 0) {
+        cardsLeaderboard.innerHTML = '<p style="color: #999;">No teachers in this department yet.</p>';
+    } else {
+        byCards.slice(0, 10).forEach((teacher, index) => {
+            const isMentorStatus = isMentor(teacher);
+            const mentorBadge = isMentorStatus ? ' <span style="background: var(--primary-color); color: var(--dark-bg); padding: 2px 8px; border-radius: 5px; font-size: 0.8em; font-weight: bold;">🌟 MENTOR</span>' : '';
+
+            const row = document.createElement('div');
+            row.style.cssText = 'display: flex; justify-content: space-between; padding: 12px; margin-bottom: 8px; background: white; border-radius: 8px; border-left: 4px solid var(--secondary-color);';
+            row.innerHTML = `
+                <div>
+                    <span style="font-weight: bold; margin-right: 10px; color: var(--accent-color);">#${index + 1}</span>
+                    <span style="font-weight: bold;">${teacher.name}</span>
+                    ${mentorBadge}
+                    <span style="margin-left: 10px; color: #666; font-size: 0.9em;">${teacher.gradeLevel || ''}</span>
+                </div>
+                <div style="font-weight: bold; color: var(--secondary-color);">
+                    ${teacher.ownedCards.length} / ${getAllCards().length} tools
+                </div>
+            `;
+            cardsLeaderboard.appendChild(row);
+        });
+    }
+
+    // Render wins leaderboard
+    const winsLeaderboard = document.getElementById('wins-leaderboard');
+    winsLeaderboard.innerHTML = '';
+
+    if (byWinRate.length === 0) {
+        winsLeaderboard.innerHTML = '<p style="color: #999;">No battle records yet.</p>';
+    } else {
+        byWinRate.slice(0, 10).forEach((teacher, index) => {
+            const winRate = ((teacher.wins / (teacher.wins + teacher.losses)) * 100).toFixed(1);
+            const isMentorStatus = isMentor(teacher);
+            const mentorBadge = isMentorStatus ? ' <span style="background: var(--primary-color); color: var(--dark-bg); padding: 2px 8px; border-radius: 5px; font-size: 0.8em; font-weight: bold;">🌟 MENTOR</span>' : '';
+
+            const row = document.createElement('div');
+            row.style.cssText = 'display: flex; justify-content: space-between; padding: 12px; margin-bottom: 8px; background: white; border-radius: 8px; border-left: 4px solid var(--success-color);';
+            row.innerHTML = `
+                <div>
+                    <span style="font-weight: bold; margin-right: 10px; color: var(--accent-color);">#${index + 1}</span>
+                    <span style="font-weight: bold;">${teacher.name}</span>
+                    ${mentorBadge}
+                    <span style="margin-left: 10px; color: #666; font-size: 0.9em;">${teacher.gradeLevel || ''}</span>
+                </div>
+                <div>
+                    <span style="font-weight: bold; color: var(--success-color);">${winRate}%</span>
+                    <span style="margin-left: 10px; color: #666; font-size: 0.9em;">(${teacher.wins}W-${teacher.losses}L)</span>
+                </div>
+            `;
+            winsLeaderboard.appendChild(row);
+        });
+    }
+
+    // Render department stats
+    const departmentStatsDiv = document.getElementById('department-stats');
+    departmentStatsDiv.innerHTML = '';
+
+    Object.keys(departmentStats).forEach(dept => {
+        const stats = departmentStats[dept];
+        const row = document.createElement('div');
+        row.style.cssText = 'padding: 15px; margin-bottom: 10px; background: white; border-radius: 8px;';
+        row.innerHTML = `
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+                <div>
+                    <h4 style="color: var(--dark-bg); margin-bottom: 5px;">${dept}</h4>
+                    <p style="color: #666; font-size: 0.9em;">${stats.teachers.length} teachers</p>
+                </div>
+                <div style="text-align: right;">
+                    <div style="font-size: 1.3em; font-weight: bold; color: var(--secondary-color);">${stats.percentComplete}%</div>
+                    <div style="font-size: 0.9em; color: #666;">Tools Collected</div>
+                </div>
+            </div>
+            <div style="background: var(--light-bg); height: 8px; border-radius: 4px; overflow: hidden;">
+                <div style="background: var(--secondary-color); height: 100%; width: ${stats.percentComplete}%; transition: width 0.5s ease;"></div>
+            </div>
+            <div style="margin-top: 8px; font-size: 0.9em; color: #666;">
+                Total Wins: ${stats.totalWins}
+            </div>
+        `;
+        departmentStatsDiv.appendChild(row);
     });
 }
 
@@ -253,6 +360,42 @@ function handleSubmitUsage() {
     } else {
         alert('You already have this card!');
     }
+}
+
+function handleSubmitScenario() {
+    const titleInput = document.getElementById('scenario-title');
+    const descriptionInput = document.getElementById('scenario-description');
+
+    const title = titleInput.value.trim();
+    const description = descriptionInput.value.trim();
+
+    if (!title) {
+        alert('Please enter a scenario title');
+        return;
+    }
+
+    if (!description) {
+        alert('Please describe the scenario');
+        return;
+    }
+
+    const currentUser = getCurrentTeacher();
+
+    // In a real implementation, this would save to Google Sheets or a database
+    // For now, just show a success message
+    alert(`🎉 Thank you for submitting your scenario!\n\n"${title}"\n\nYour scenario has been submitted for review. Once approved by the instructional coach, it will be added to the Lesson Challenge rotation and you'll be credited as the author!`);
+
+    // Clear form
+    titleInput.value = '';
+    descriptionInput.value = '';
+
+    // Log to console for demo purposes
+    console.log('Scenario Submission:', {
+        teacher: currentUser.name,
+        title,
+        description,
+        timestamp: new Date().toISOString()
+    });
 }
 
 // Add refresh button to sync with Google Sheets
