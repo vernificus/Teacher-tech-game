@@ -1,8 +1,8 @@
 // Card rendering and display functions
 
-function createCardElement(card, isOwned = true, size = 'normal') {
+function createCardElement(card, isOwned = true, size = 'normal', masteryLevel = 1) {
     const cardDiv = document.createElement('div');
-    cardDiv.className = `tech-card ${!isOwned ? 'locked' : ''} ${size === 'mini' ? 'mini-card' : ''}`;
+    cardDiv.className = `tech-card ${!isOwned ? 'locked' : ''} ${size === 'mini' ? 'mini-card' : ''} ${isOwned && masteryLevel > 1 ? `mastery-${masteryLevel}` : ''}`;
     cardDiv.dataset.cardId = card.id;
 
     if (size === 'mini') {
@@ -23,7 +23,10 @@ function createCardElement(card, isOwned = true, size = 'normal') {
              <div class="card-icon-fallback" style="display: none;">${card.icon}</div>` :
             `<div class="card-icon-fallback">${card.icon}</div>`;
 
+        const masteryBadge = isOwned ? `<div class="card-mastery-badge">${getMasteryLabel(masteryLevel)}</div>` : '';
+
         cardDiv.innerHTML = `
+            ${masteryBadge}
             <div class="card-header">
                 <span class="card-name">${card.name}</span>
                 <span class="card-type">${card.type}</span>
@@ -114,9 +117,22 @@ function showCardModal(card) {
             <strong>Description:</strong>
             <p style="margin-top: 10px; color: #555;">${card.description}</p>
         </div>
-        <div style="background: var(--light-bg); padding: 10px; border-radius: 8px;">
+        <div style="background: var(--light-bg); padding: 10px; border-radius: 8px; margin-bottom: 15px;">
             <strong>PD Code:</strong> <code style="background: white; padding: 5px 10px; border-radius: 5px;">${card.pdCode}</code>
         </div>
+        ${card.resourceLink ? `
+            <div style="margin-top: 15px;">
+                <a href="${card.resourceLink}" target="_blank" rel="noopener noreferrer"
+                   style="display: inline-block; background: var(--accent-color); color: white;
+                          padding: 12px 24px; border-radius: 8px; text-decoration: none;
+                          font-weight: bold; transition: all 0.3s ease;"
+                   onmouseover="this.style.background='#cc0000'"
+                   onmouseout="this.style.background='var(--accent-color)'">
+                    📚 Learn How to Use This Tool
+                </a>
+                ${card.offline ? '<span style="margin-left: 10px; color: var(--success-color); font-weight: bold;">✅ Works Offline</span>' : ''}
+            </div>
+        ` : ''}
     `;
 
     modal.classList.add('active');
@@ -143,7 +159,8 @@ function renderCollection() {
 
     allCards.forEach(card => {
         const isOwned = hasCard(teacher, card.id);
-        const cardElement = createCardElement(card, isOwned);
+        const masteryLevel = isOwned ? getCardMastery(teacher, card.id) : 1;
+        const cardElement = createCardElement(card, isOwned, 'normal', masteryLevel);
         cardGrid.appendChild(cardElement);
     });
 }
