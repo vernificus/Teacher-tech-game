@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Teacher Tech Card Battle</title>
+    <link rel="stylesheet" href="styles/main.css">
+</head>
+<body>
+    <div class="app-container">
+        <!-- Header -->
+        <header class="main-header">
+            <h1>⚡ Teacher Tech Card Battle ⚡</h1>
+            <div class="user-info">
+                <span id="current-teacher">Select Teacher</span>
+                <button id="logout-btn" class="btn btn-secondary" style="display: none;">Logout</button>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <main id="main-content">
+            <!-- Login Screen -->
+            <div id="login-screen" class="screen active">
+                <div class="login-container">
+                    <h2>Choose Your Teacher</h2>
+                    <div id="teacher-list" class="teacher-list"></div>
+                    <button id="add-teacher-btn" class="btn btn-primary">+ Add New Teacher</button>
+                </div>
+            </div>
+
+            <!-- Dashboard Screen -->
+            <div id="dashboard-screen" class="screen">
+                <div class="dashboard-nav">
+                    <button class="nav-btn active" data-view="collection">My Collection</button>
+                    <button class="nav-btn" data-view="battle">Lesson Challenge</button>
+                    <button class="nav-btn" data-view="earn-cards">Earn Cards</button>
+                </div>
+
+                <!-- Collection View -->
+                <div id="collection-view" class="view active">
+                    <div class="collection-header">
+                        <h2>My Card Collection</h2>
+                        <p class="collection-stats">
+                            <span id="cards-owned">0</span> / <span id="total-cards">0</span> Cards Collected
+                        </p>
+                    </div>
+                    <div id="card-grid" class="card-grid"></div>
+                </div>
+
+                <!-- Lesson Challenge View -->
+                <div id="battle-view" class="view">
+                    <div class="battle-container">
+                        <h2>🎓 Lesson Planning Challenge</h2>
+                        <p style="margin-bottom: 20px; color: #666;">Create the best lesson plan using your edtech tools!</p>
+                        <div id="opponent-list" class="opponent-list"></div>
+
+                        <div id="challenge-arena" class="battle-arena" style="display: none;">
+                            <div class="battle-header">
+                                <h3><span id="player1-name"></span> vs <span id="player2-name"></span></h3>
+                            </div>
+
+                            <!-- Scenario Display -->
+                            <div id="scenario-display" style="margin-bottom: 30px;"></div>
+
+                            <!-- Selected Cards Display -->
+                            <div style="margin-bottom: 20px;">
+                                <h4 style="margin-bottom: 15px;">Your Selected Tools:</h4>
+                                <div id="selected-cards-display" style="display: flex; gap: 15px; flex-wrap: wrap; min-height: 80px; padding: 15px; background: var(--light-bg); border-radius: 10px;">
+                                    <p style="color: #999;">Select tools from your deck below...</p>
+                                </div>
+                            </div>
+
+                            <!-- Teacher's Deck -->
+                            <div style="margin-bottom: 20px;">
+                                <h4 style="margin-bottom: 15px;">Your Available Tools:</h4>
+                                <div id="teacher-deck" class="card-selector" style="min-height: 100px;"></div>
+                            </div>
+
+                            <!-- Challenge Log -->
+                            <div class="battle-log" style="margin-bottom: 20px;">
+                                <h4>Evaluation Results</h4>
+                                <div id="challenge-messages"></div>
+                            </div>
+
+                            <div class="battle-controls">
+                                <button id="evaluate-lesson-btn" class="btn btn-primary">Evaluate Lesson Plans</button>
+                                <button id="back-to-selection-btn" class="btn btn-secondary">Back</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Earn Cards View -->
+                <div id="earn-cards-view" class="view">
+                    <h2>Earn New Cards</h2>
+                    <div class="earn-cards-container">
+                        <div class="earn-method">
+                            <h3>🎓 Attend Professional Development</h3>
+                            <p>Earn cards by attending training sessions on educational technology tools</p>
+                            <input type="text" id="pd-code" placeholder="Enter PD code">
+                            <button id="redeem-pd-btn" class="btn btn-primary">Redeem Code</button>
+                        </div>
+
+                        <div class="earn-method">
+                            <h3>👩‍🏫 Use Tool with Students</h3>
+                            <p>Earn cards by implementing tools in your classroom</p>
+                            <select id="tool-select">
+                                <option value="">Select a tool you used</option>
+                            </select>
+                            <input type="date" id="usage-date">
+                            <textarea id="usage-notes" placeholder="Describe how you used the tool..."></textarea>
+                            <button id="submit-usage-btn" class="btn btn-primary">Submit Usage</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <!-- Card Modal -->
+        <div id="card-modal" class="modal">
+            <div class="modal-content">
+                <span class="close">&times;</span>
+                <div id="modal-card-detail"></div>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/data.js"></script>
+    <script src="js/sheets.js"></script>
+    <script src="js/cards.js"></script>
+    <script src="js/lesson-challenge.js"></script>
+    <script src="js/app.js"></script>
+</body>
+</html>
